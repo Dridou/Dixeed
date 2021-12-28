@@ -69,3 +69,34 @@ if ( version_compare( get_bloginfo( 'version' ), '4.7.3', '>=' ) && ( is_admin()
  * Note: Do not add any custom code here. Please use a custom plugin so that your customizations aren't lost during updates.
  * https://github.com/woocommerce/theme-customisations
  */
+
+/**
+ * Checkout custom field
+ **/
+
+add_action('woocommerce_after_order_notes', 'custom_checkout_field');
+
+function custom_checkout_field($checkout){
+	echo '<div id="custom_checkout_field"><h3>' . __('Print a note with your product?') . '</h3>';
+	woocommerce_form_field('custom_field_name',
+						   array( 'type' => 'text',
+								 'class' => array('my-field-class form-row-wide') ,
+								 'label' => __('Custom note with with your product') ,
+								 'placeholder' => __('Note') ,) ,
+						   $checkout->get_value('custom_field_name'));
+	echo '</div>';
+}
+/**
+ *Update the order meta with field value
+ */
+
+add_action( 'woocommerce_checkout_update_order_meta', 'my_custom_checkout_field_update_order_meta' );
+
+function my_custom_checkout_field_update_order_meta( $order_id ) {
+	if ( ! empty( $_POST['custom_field_name'] ) ) {
+		update_post_meta( $order_id,
+						 '_custom_field_note',
+						 sanitize_text_field( $_POST['custom_field_name'] ) );
+		?><pre><?php var_dump('ok'); ?></pre><?php
+	}
+}
