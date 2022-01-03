@@ -9,15 +9,21 @@
 add_action('woocommerce_account_content', 'display_message_account_content');
 
 function display_message_account_content() {
-    $html = get_option( 'display_options' );
-    echo esc_attr($html);
+    $text_to_display = get_option('display_options');
+    $display_it = get_option('to_display_option');
+    if ($display_it == 1) {
+        echo "<p>";
+        echo esc_attr($text_to_display);
+        echo "</p>";
+    }
+        
 }
 
 
 /**
  * Register our wporg_settings_init to the admin_init action hook.
  */
-add_action( 'admin_init', 'display_settings_init' );
+add_action('admin_init', 'display_settings_init');
 
 /**
  * @internal never define functions inside callbacks.
@@ -30,18 +36,19 @@ add_action( 'admin_init', 'display_settings_init' );
 function display_settings_init() {
     // Register a new setting for "wporg" page.
     // register_setting( string $option_group, string $option_name, array $args = array() )
-    register_setting( 'display', 'display_options' ); 
+    register_setting('display', 'display_options');
+    register_setting('display', 'to_display_option');
  
     // Register a new section in the "wporg" page.
     // add_settings_section( string $id, string $title, callable $callback, string $page )
     add_settings_section(
-        'wporg_section_developers',
+        'display_section_developers',
         __( 'Display text options', 'display' ),
         'display_section_developers_callback',
         'display'
     );
  
-    // Register a new field in the "wporg_section_developers" section, inside the "wporg" page.
+    // Register a new field in the "display_section_developers" section, inside the "wporg" page.
     // add_settings_field( string $id, string $title, callable $callback, string $page, string $section = 'default', array $args = array() )
     add_settings_field(
         'text_field', // As of WP 4.6 this value is used only internally.
@@ -49,19 +56,33 @@ function display_settings_init() {
         __( 'Text to display', 'display' ),
         'text_field_cb',
         'display',
-        'wporg_section_developers',
+        'display_section_developers',
         array(
             'label_for'         => 'text_field',
             'class'             => 'display_row',
             'display_custom_data' => 'custom',
         )
     );
+
+    add_settings_field(
+        'checked_field',
+        __('Display message ?', 'display'),
+        'checked_field_cb',
+        'display',
+        'display_section_developers',
+        array(
+            'label_for'         => 'checked_field',
+            'class'             => 'display_row',
+            'display_custom_data' => 'custom',
+        )
+        
+    );
 }
 
 
 function display_section_developers_callback( $args ) {
     ?>
-    <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Enter your text.', 'display' ); ?></p>
+    <p id="<?php echo esc_attr( $args['id'] ); ?>"><?php esc_html_e( 'Enter your text and choose if you want do display it or not.', 'display' ); ?></p>
     <?php
 }
  
@@ -83,8 +104,15 @@ function display_section_developers_callback( $args ) {
     ?>
        <input type="text" name="display_options" value="<?php echo isset( $options ) ? esc_attr( $options ) : ''; ?>">
     <?php
-} 
+}
 
+
+function checked_field_cb( $args ) {
+    $options = get_option('to_display_option');
+    ?>
+        <input type="checkbox" name="to_display_option" value="<?php echo isset($options) ? 1 : 0; ?>" <?php  echo ($options == '1') ? 'checked' : ''; ?>>
+    <?php
+}
 
 /**
  * Register our display_options_page to the admin_menu action hook.
