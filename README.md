@@ -9,7 +9,20 @@ Everything is not perfect at all but I tried to understand the maximum amount of
 I used a plugin to create the registration form, which I hope is not forbiden.
 
 ------- How to deploy the live site ----------------
-Install XAMPP or other similar software. Replace its htdocs directory by this one. Replace its sql directory by this one. Start XAMPP (Appach and MYSQL server and the site should be running.
+Install XAMPP or other similar software. Replace its htdocs directory by this one. I suggested to replace the mysql directory with mine before seeing to see export db in .sql, I assume you know how to create the db for Wordpress. Start XAMPP (Appach and MYSQL server and the site should be running.
 
-Adrien Nebon-Carle
+Rendering Instructions:
+- I did not use any domain name because I ran my website on XAMPP.
+- Installed plugins:
+	- Fake Pay for Woocommerce
+	- User Registration
+	- Variation swatches for WooCommerce
+	- WooCommerce
+	- Display Message for client (own plugin)
+
+- Accces for wp backend:
+ID: root
+mdp: SU35xTtx5
+
+- I didn't do the expert level
 
