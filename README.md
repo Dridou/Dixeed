@@ -8,3 +8,8 @@ All features are done. I stil have some questions and I appreciated Wordpress gu
 Everything is not perfect at all but I tried to understand the maximum amount of stuff to do this correclty.
 I used a plugin to create the registration form, which I hope is not forbiden.
 
+------- How to deploy the live site ----------------
+Install XAMPP or other similar software. Replace its htdocs directory by this one. Replace its sql directory by this one. Start XAMPP (Appach and MYSQL server and the site should be running.
+
+Adrien Nebon-Carle
+
